@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Leveraging Locality to Boost Sample Efficiency in Robotic Manipulation">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SGRv2</title>
+
+  <style>
+    .video-container {
+        position: relative; /* 使得伪元素的定位基于此容器 */
+        display: inline-block; /* 使得容器大小适应内容 */
+    }
+
+    .video-container::before,
+    .video-container::after {
+        content: ""; /* 创建一个空内容的伪元素 */
+        position: absolute; /* 绝对定位 */
+        left: 0; /* 左对齐 */
+        right: 0; /* 右对齐 */
+        height: 10px; /* 高度 */
+        background: rgba(0, 0, 0, 0.2); /* 阴影颜色 */
+        z-index: -1; /* 放在视频的后面 */
+    }
+
+    .video-container::before {
+        top: -5px; /* 上阴影位置 */
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); /* 上阴影 */
+    }
+
+    .video-container::after {
+        bottom: -5px; /* 下阴影位置 */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* 下阴影 */
+    }
+
+    video {
+        display: block; /* 防止默认的内联空隙 */
+    }
+  </style>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FV4ZJ9PVSV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-FV4ZJ9PVSV');
+  </script>
+
+
+  <script>
+    function updateGeneralizationVideo1() {
+      var inst = document.getElementById("single-menu-instances1").value;
+
+      console.log("single", inst)
+
+      var video = document.getElementById("generalization-video1");
+      video.src = "media/generalization/" + 
+                  "cup_black" +
+                  inst +
+                  "_m4.mp4"
+      video.playbackRate = 1.0;
+      video.play();
+    }
+
+    function updateGeneralizationVideo2() {
+
+      var inst = document.getElementById("single-menu-instances2").value;
+
+      console.log("single", inst)
+
+      var video = document.getElementById("generalization-video2");
+      video.src = "media/generalization/" + 
+                  "cup_green" +
+                  inst +
+                  "_m4.mp4"
+      video.playbackRate = 1.0;
+      video.play();
+    }
+
+    function updateSubVideo1() {
+
+      var task = document.getElementById("sub-menu-tasks1").value;
+      var inst = document.getElementById("sub-menu-instances1").value;
+
+      console.log("sub1", task, inst)
+    
+      var video = document.getElementById("sub-video1");
+      video.src = "media/sub-tasks/" + 
+                  task + 
+                  inst +
+                  "_m4.mp4"
+      video.playbackRate = 1.0;
+      video.play();
+    }
+
+    function updateSubVideo2() {
+
+      var task = document.getElementById("sub-menu-tasks2").value;
+      var inst = document.getElementById("sub-menu-instances2").value;
+
+      console.log("sub2", task, inst)
+      let text
+      switch (task) {
+        case 'coffee3_':
+          switch (inst) {
+            case '1':
+              text = `<p><span style="color: #FF4500;"><b>Failure.</b></span> Collide with the cup. </p>`;
+              break;
+            default:
+              text = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+          }
+          break;
+        default:
+            text = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+      }
+
+      document.getElementById('sub-text2').innerHTML = text;
+
+
+      var video = document.getElementById("sub-video2");
+      video.src = "media/sub-tasks/" + 
+                  task + 
+                  inst +
+                  "_m4.mp4"
+      video.playbackRate = 1.0;
+      video.play();
+    }
+
+    function updateComparativeVideos() {
+      var task = document.getElementById("comparative-menu-tasks").value;
+      console.log("Comparative", task)
+
+      let text1, text2, text3;
+
+      switch (task) {
+          case 'trash':
+              text1 = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+              text2 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> Pick the wrong object.</p>`;
+              text3 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> </p>`;
+              break;
+          case 'socks':
+              text1 = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+              text2 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> </p>`;
+              text3 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> </p>`;
+              break;
+          case 'pen':
+              text1 = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+              text2 = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+              text3 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> </p>`;
+              break;
+          case 'coffee2':
+              text1 = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+              text2 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> </p>`;
+              text3 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> Pick the wrong object.</p>`;
+              break;
+          case 'coffee4':
+              text1 = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+              text2 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> Collide with the kettle. </p>`;
+              text3 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> Pour water outside the funnel. </p>`;
+              break;
+          case 'cup_black':
+              text1 = `<p><span style="color: #76B900;"><b>Success.</b></span> </p>`;
+              text2 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> Pick the wrong color cup. </p>`;
+              text3 = `<p><span style="color: #FF4500;"><b>Failure.</b></span> Pick the wrong color cup. </p>`;
+              break;
+          default:
+              text1 = ``;
+              text2 = ``;
+              text3 = ``;
+      }
+  
+      // update text
+      document.getElementById('comparative-text1').innerHTML = text1;
+      document.getElementById('comparative-text2').innerHTML = text2;
+      document.getElementById('comparative-text3').innerHTML = text3;
+
+
+      // Update video sources based on the selected task
+      document.getElementById("comparative-video1").src = `media/comparative_videos/${task}_sgrv2.mp4`;
+      document.getElementById("comparative-video2").src = `media/comparative_videos/${task}_peract.mp4`;
+      document.getElementById("comparative-video3").src = `media/comparative_videos/${task}_rvt.mp4`;
+
+      // Reload videos
+      document.getElementById("comparative-video1").load();
+      document.getElementById("comparative-video2").load();
+      document.getElementById("comparative-video3").load();
+  }
+
+
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body onload="updateGeneralizationVideo1(); updateGeneralizationVideo2(); updateSubVideo1(); updateSubVideo2(); updateComparativeVideos();">
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Leveraging Locality to Boost Sample Efficiency in Robotic Manipulation</h1>
+          <!-- <div class="column has-text-centered"> -->
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a target="_blank" href="https://tongzhangthu.github.io/">Tong Zhang</a><sup>1, 2, 3</sup>,</span>
+              <span class="author-block">
+                <a target="_blank" href="https://yingdong-hu.github.io/">Yingdong Hu</a><sup>1, 2, 3</sup>,</span>
+              <span class="author-block">
+                <a target="_blank" >Jiacheng You</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a target="_blank" href="https://yang-gao.weebly.com/">Yang Gao</a><sup>1, 2, 3</sup>
+              </span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Tsinghua University,</span>
+              <span class="author-block"><sup>2</sup>Shanghai Artificial Intelligence Laboratory,</span>
+              <span class="author-block"><sup>3</sup>Shanghai Qi Zhi Institute</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a target="_blank" href=""
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- arXiv Link. -->
+                <span class="link-block">
+                  <a target="_blank" href=""
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Video Link. -->
+                <!-- <span class="link-block">
+                  <a target="_blank" href="https://youtu.be/UdzoagBgWTA"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span> -->
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a target="_blank" href=""
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code (Coming Soon)</span>
+                    </a>
+                </span>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-fullhd">
+    <div class="hero-body" style="text-align: center;">
+      <img src="media/figures/paper_figure1.png" alt="Description of the image" style="width:1000px; height:auto;">
+      <h2 class="subtitle has-text" style="width: 72%; margin: 0 auto; text-align: left;">
+      </br>
+      <b>Left:</b> Sample efficiency of SGRv2. We evaluate SGR and SGRv2 on 26 RLBench tasks, with demonstration numbers ranging from 100 to 5. 
+      Results indicate that, owing to the locality of SGRv2, it exhibits exceptional sample efficiency, 
+      with its success rate declining by only about 10%. <b>Top Right:</b> Overview of simulation results. 
+      We test SGRv2 on 3 benchmarks, consistently outperforming the baselines. 
+      <b>Bottom Right:</b> Tasks of the 3 simulation benchmarks.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3" style="text-align: center;">Overview Video</h2>
+    <br/>
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content video-container">
+          <video id="dollyzoom" controls playsinline controlsList="nodownload" height="100%">
+            <source src="./media/overview_video/SGRv2_overview_public.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Given the high cost of collecting robotic data in the real world, 
+            sample efficiency is a consistently compelling pursuit in robotics. 
+            In this paper, we introduce <b>SGRv2</b>, an imitation learning framework that enhances sample 
+            efficiency through improved visual and action representations. Central to the design of SGRv2 
+            is the incorporation of a critical inductive bias—<b>action locality</b>, 
+            which posits that robot's actions are predominantly influenced by the target object and 
+            its interactions with the local environment. 
+          </p>
+          <p>
+            Extensive experiments in both simulated and 
+            real-world settings demonstrate that action locality is essential for boosting sample efficiency. 
+            SGRv2 excels in RLBench tasks with keyframe control using merely 5 demonstrations and surpasses the 
+            RVT baseline in 23 of 26 tasks. Furthermore, when evaluated on ManiSkill2 and MimicGen using dense control, 
+            SGRv2's success rate is 2.54 times that of SGR. In real-world environments, with only eight demonstrations, 
+            SGRv2 can perform a variety of tasks at a markedly higher success rate compared to baseline models.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="rows">
+
+    <div class="rows is-centered ">
+      <div class="row is-full-width">
+        <h2 class="title is-3"><span class="dperact">Locality Aware Action Modeling</span></h2>
+
+        <img src="media/figures/paper_figure2.png" class="interpolation-image" 
+         alt="Interpolate start reference image." />
+        </br>
+        </br>
+          <p>
+            <b>SGRv2 Architecture.</b> Built upon SGR, SGRv2 intergrates locality into its framework through four primary designs: 
+            an encoder-decoder architecture for point-wise features, a strategy for predicting relative target position, 
+            a weighted average for focusing on critical local regions, and a dense supervision strategy (not shown in the figure). 
+            For simplicity in the visualization, we omit the proprioceptive data that is concatenated with the RGB of the point cloud 
+            before being fed into the geometric branch.
+          </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <h2 class="title is-3" style="text-align: center;">Real-Robot Results (4X Default Speed)</h2>
+    <br/>
+    <h2 class="title is-4">Long-horizon Tasks</h2>
+    <div class="columns is-centered">
+
+      <!-- Visual Effects. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-5">Tidy Up the Table</h3>
+          <!-- <video id="dollyzoom" autoplay muted loop playsinline height="100%"> -->
+          <video id="dollyzoom" controls muted autoplay loop playsinline controlsList="nodownload" height="100%">
+            <source src="./media/tasks/table_m4.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ Visual Effects. -->
+
+      <!-- Matting. -->
+      <div class="column">
+        <h3 class="title is-5">Make Coffee</h3>
+        <div class="columns is-centered">
+          <div class="column content">
+            <!-- <video id="dollyzoom" autoplay muted loop playsinline height="100%"> -->
+            <video id="dollyzoom" controls muted autoplay loop playsinline controlsList="nodownload" height="100%">
+              <source src="./media/tasks/coffee_m4.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Matting. -->
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Shared Description -->
+    <div class="rows is-centered">
+      <div class="row is-full-width">
+        <h2 class="title is-4">Generalization Task</h2>
+        <h3 class="title is-5">Move Color Cup to Target</h3>
+        <p class="has-text-centered">
+          SGRv2 trained on 4 colors (white, red, yellow, orange),
+          <!-- <h3 class="title is-5">SGRv2 trained on 4 colors (white, red, yellow, orange).</h3> -->
+        </p>
+      </div>
+    </div>
+    <br/>
+    <div class="columns">
+      <!-- First Video Column -->
+      <div class="column has-text-centered">
+        evaluated on black cup (unseen), episode
+        <div class="select is-small">
+          <select id="single-menu-instances1" onchange="updateGeneralizationVideo1()">
+            <option value="1">01</option>
+            <option value="2">02</option>
+          </select>
+        </div>
+        <br/>
+        <br/>
+        <video id="generalization-video1" controls muted autoplay loop playsinline controlsList="nodownload" width="100%">
+          <source src="media/generalization/cup_black1_m4.mp4" type="video/mp4">
+        </video>
+        <p id="generalization-text1"><span style="color: #76B900;"><b>Success.</b></span> </p>
+      </div>
+
+      <!-- Second Video Column -->
+      <div class="column has-text-centered">
+        evaluated on green cup (unseen), episode
+        <div class="select is-small">
+          <select id="single-menu-instances2" onchange="updateGeneralizationVideo2()">
+            <option value="1">01</option>
+            <option value="2">02</option>
+          </select>
+        </div>
+        <br/>
+        <br/>
+        <video id="generalization-video2" controls muted autoplay loop playsinline controlsList="nodownload" width="100%">
+          <source src="media/generalization/cup_green1_m4.mp4" type="video/mp4">
+        </video>
+        <p id="generalization-text2"><span style="color: #76B900;"><b>Success.</b></span> </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Shared Description -->
+    <div class="rows is-centered">
+      <div class="row is-full-width">
+        <h2 class="title is-4">Sub-tasks Evaluation</h2>
+        <p class="has-text-centered">
+        </p>
+      </div>
+    </div>
+    <div class="columns">
+      <!-- First Video Column -->
+      <div class="column has-text-centered">
+        <!-- Tidy Up the Table -->
+        <h3 class="title is-5">Tidy Up the Table</h3>
+        sub-task
+        <div class="select is-small">
+          <select id="sub-menu-tasks1" onchange="updateSubVideo1()">
+            <option value="trash">put trash in trash can</option>
+            <option value="socks">put socks in box</option>
+            <option value="pen">put marker in pen holder</option>
+            <option value="open_drawer">open drawer</option>
+            <option value="sugar">put lollipop in drawer</option>
+            <option value="close_drawer">close drawer</option>
+            
+          </select>
+        </div>
+        episode
+        <div class="select is-small">
+          <select id="sub-menu-instances1" onchange="updateSubVideo1()">
+            <option value="1">01</option>
+            <option value="2">02</option>
+          </select>
+        </div>
+        <br/>
+        <br/>
+        <video id="sub-video1" controls muted autoplay loop playsinline controlsList="nodownload" width="100%">
+          <source src="media/sub-tasks/trash1_m4.mp4" type="video/mp4">
+        </video>
+        <p id="sub-text1"><span style="color: #76B900;"><b>Success.</b></span> </p>
+      </div>
+
+      <!-- Second Video Column -->
+      <div class="column has-text-centered">
+     
+        <!-- Make Coffee -->
+        <h3 class="title is-5">Make Coffee</h3>
+        sub-task
+        <div class="select is-small">
+          <select id="sub-menu-tasks2" onchange="updateSubVideo2()">
+            <option value="coffee1_">turn on coffee machine</option>
+            <option value="coffee2_">put funnel onto carafe</option>
+            <option value="coffee3_">pour powder into funnel</option>
+            <option value="coffee4_">pour water</option>            
+          </select>
+        </div>
+        episode
+        <div class="select is-small">
+          <select id="sub-menu-instances2" onchange="updateSubVideo2()">
+            <option value="1">01</option>
+            <option value="2">02</option>
+          </select>
+        </div>
+        <br/>
+        <br/>
+        <video id="sub-video2" controls muted autoplay loop playsinline controlsList="nodownload" width="100%">
+          <source src="media/sub-tasks/coffee1_1_m4.mp4" type="video/mp4">
+        </video>
+        <p id="sub-text2"><span style="color: #76B900;"><b>Success.</b></span> </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+      <!-- Shared Description -->
+      <div class="rows is-centered">
+          <div class="row is-full-width">
+              <h2 class="title is-4">Comparative Results</h2>
+              <p class="has-text-centered">
+              </p>
+          </div>
+      </div>
+
+      <!-- Task Menu -->
+      <div class="has-text-centered">
+          Evaluated on sub-task  
+          <div class="select is-small">
+              <select id="comparative-menu-tasks" onchange="updateComparativeVideos()">
+                  <option value="trash">put trash in trash can</option>
+                  <option value="socks">put socks in box</option>
+                  <option value="pen">put marker in pen holder</option>
+                  <option value="coffee2">put funnel onto carafe</option>
+                  <option value="coffee4">pour water</option>
+                  <option value="cup_black">move color (black) cup to target</option>
+              </select>
+          </div>
+      </div>
+      <br/>
+
+      <div class="columns">
+          <!-- First Video Column -->
+          <div class="column has-text-centered">
+              <h3 class="title is-5">SGRv2 (ours)</h3>
+              <video id="comparative-video1" controls muted autoplay loop playsinline controlsList="nodownload" width="100%">
+                  <source src="media/comparative_videos/trash_sgrv2.mp4" type="video/mp4">
+              </video>
+              <p id="comparative-text1"><span style="color: #76B900;"><b>Success.</b></span> </p> 
+          </div>
+
+          <!-- Second Video Column -->
+          <div class="column has-text-centered">
+              <h3 class="title is-5">PerAct</h3>
+              <video id="comparative-video2" controls muted autoplay loop playsinline controlsList="nodownload" width="100%">
+                  <source src="media/comparative_videos/trash_peract.mp4" type="video/mp4">
+              </video>
+
+              <p id="comparative-text2"><span style="color: #FF4500;"><b>Failure.</b></span> Pick the wrong object.</p>
+          </div>
+
+          <!-- Third Video Column -->
+          <div class="column has-text-centered">
+              <h3 class="title is-5">RVT</h3>
+              <video id="comparative-video3" controls muted autoplay loop playsinline controlsList="nodownload" width="100%">
+                  <source src="media/comparative_videos/trash_rvt.mp4" type="video/mp4">
+              </video>
+              <p id="comparative-text3"><span style="color: #FF4500;"><b>Failure.</b></span> </p>
+          </div>
+      </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content has-text-centered">
+          <p>
+            Website template borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a> and <a href="https://github.com/cliport/cliport.github.io">CLIPort</a>. 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
