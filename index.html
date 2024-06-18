@@ -10,33 +10,33 @@
 
   <style>
     .video-container {
-        position: relative; /* 使得伪元素的定位基于此容器 */
-        display: inline-block; /* 使得容器大小适应内容 */
+        position: relative; 
+        display: inline-block; 
     }
 
     .video-container::before,
     .video-container::after {
-        content: ""; /* 创建一个空内容的伪元素 */
-        position: absolute; /* 绝对定位 */
-        left: 0; /* 左对齐 */
-        right: 0; /* 右对齐 */
-        height: 10px; /* 高度 */
-        background: rgba(0, 0, 0, 0.2); /* 阴影颜色 */
-        z-index: -1; /* 放在视频的后面 */
+        content: ""; 
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 10px;
+        background: rgba(0, 0, 0, 0.2); 
+        z-index: -1; 
     }
 
     .video-container::before {
-        top: -5px; /* 上阴影位置 */
-        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); /* 上阴影 */
+        top: -5px; 
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); 
     }
 
     .video-container::after {
-        bottom: -5px; /* 下阴影位置 */
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* 下阴影 */
+        bottom: -5px; 
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
     video {
-        display: block; /* 防止默认的内联空隙 */
+        display: block; 
     }
   </style>
 
@@ -241,7 +241,7 @@
               <div class="publication-links">
                 <!-- PDF Link. -->
                 <span class="link-block">
-                  <a target="_blank" href=""
+                  <a target="_blank" href="https://arxiv.org/pdf/2406.10615"
                      class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                         <i class="fas fa-file-pdf"></i>
@@ -251,7 +251,7 @@
                 </span>
                 <!-- arXiv Link. -->
                 <span class="link-block">
-                  <a target="_blank" href=""
+                  <a target="_blank" href="https://arxiv.org/abs/2406.10615"
                      class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                         <i class="ai ai-arxiv"></i>
