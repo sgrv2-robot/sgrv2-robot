@@ -323,62 +323,7 @@
 </section>
 
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Given the high cost of collecting robotic data in the real world, 
-            sample efficiency is a consistently compelling pursuit in robotics. 
-            In this paper, we introduce <b>SGRv2</b>, an imitation learning framework that enhances sample 
-            efficiency through improved visual and action representations. Central to the design of SGRv2 
-            is the incorporation of a critical inductive bias—<b>action locality</b>, 
-            which posits that robot's actions are predominantly influenced by the target object and 
-            its interactions with the local environment. 
-          </p>
-          <p>
-            Extensive experiments in both simulated and 
-            real-world settings demonstrate that action locality is essential for boosting sample efficiency. 
-            SGRv2 excels in RLBench tasks with keyframe control using merely 5 demonstrations and surpasses the 
-            RVT baseline in 23 of 26 tasks. Furthermore, when evaluated on ManiSkill2 and MimicGen using dense control, 
-            SGRv2's success rate is 2.54 times that of SGR. In real-world environments, with only eight demonstrations, 
-            SGRv2 can perform a variety of tasks at a markedly higher success rate compared to baseline models.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="rows">
-
-    <div class="rows is-centered ">
-      <div class="row is-full-width">
-        <h2 class="title is-3"><span class="dperact">Locality Aware Action Modeling</span></h2>
-
-        <img src="media/figures/paper_figure2.png" class="interpolation-image" 
-         alt="Interpolate start reference image." />
-        </br>
-        </br>
-          <p>
-            <b>SGRv2 Architecture.</b> Built upon SGR, SGRv2 intergrates locality into its framework through four primary designs: 
-            an encoder-decoder architecture for point-wise features, a strategy for predicting relative target position, 
-            a weighted average for focusing on critical local regions, and a dense supervision strategy (not shown in the figure). 
-            For simplicity in the visualization, we omit the proprioceptive data that is concatenated with the RGB of the point cloud 
-            before being fed into the geometric branch.
-          </p>
-
-      </div>
-    </div>
-  </div>
-</section>
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -604,6 +549,63 @@
               <p id="comparative-text3"><span style="color: #FF4500;"><b>Failure.</b></span> </p>
           </div>
       </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Given the high cost of collecting robotic data in the real world, 
+            sample efficiency is a consistently compelling pursuit in robotics. 
+            In this paper, we introduce <b>SGRv2</b>, an imitation learning framework that enhances sample 
+            efficiency through improved visual and action representations. Central to the design of SGRv2 
+            is the incorporation of a critical inductive bias—<b>action locality</b>, 
+            which posits that robot's actions are predominantly influenced by the target object and 
+            its interactions with the local environment. 
+          </p>
+          <p>
+            Extensive experiments in both simulated and 
+            real-world settings demonstrate that action locality is essential for boosting sample efficiency. 
+            SGRv2 excels in RLBench tasks with keyframe control using merely 5 demonstrations and surpasses the 
+            RVT baseline in 23 of 26 tasks. Furthermore, when evaluated on ManiSkill2 and MimicGen using dense control, 
+            SGRv2's success rate is 2.54 times that of SGR. In real-world environments, with only eight demonstrations, 
+            SGRv2 can perform a variety of tasks at a markedly higher success rate compared to baseline models.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="rows">
+
+    <div class="rows is-centered ">
+      <div class="row is-full-width">
+        <h2 class="title is-3"><span class="dperact">Locality Aware Action Modeling</span></h2>
+
+        <img src="media/figures/paper_figure2.png" class="interpolation-image" 
+         alt="Interpolate start reference image." />
+        </br>
+        </br>
+          <p>
+            <b>SGRv2 Architecture.</b> Built upon SGR, SGRv2 intergrates locality into its framework through four primary designs: 
+            an encoder-decoder architecture for point-wise features, a strategy for predicting relative target position, 
+            a weighted average for focusing on critical local regions, and a dense supervision strategy (not shown in the figure). 
+            For simplicity in the visualization, we omit the proprioceptive data that is concatenated with the RGB of the point cloud 
+            before being fed into the geometric branch.
+          </p>
+
+      </div>
+    </div>
   </div>
 </section>
 
